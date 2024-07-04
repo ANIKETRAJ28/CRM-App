@@ -1,11 +1,10 @@
 import './App.css'
+import Login from './pages/Auth/Login'
 
 function App() {
 
   return (
-    <>
-      crm app
-    </>
+    <Login/>
   )
 }
 
