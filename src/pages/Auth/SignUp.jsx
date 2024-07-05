@@ -28,7 +28,7 @@ function SignUp() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default SignUp;
