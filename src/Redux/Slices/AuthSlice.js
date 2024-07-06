@@ -24,14 +24,15 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, action) => {
-            state.isloggedIn = (action.payload.data.token != undefined),
-            state.data = action.payload.data.userData;
-            state.token = action.payload.data.token;
-            state.role = action.payload.data?.userType;
-            localStorage.setItem("role", action.payload.data?.userType);
-            localStorage.setItem("isLoggedIn", (action.payload.data.token != undefined));
-            localStorage.setItem("data", JSON.stringify(action.payload.data.userData));
-            localStorage.setItem("token", action.payload.data.token);
+            if(!action.payload) return;
+            state.isloggedIn = (action.payload?.data?.token != undefined),
+            state.data = action.payload?.data?.userData;
+            state.token = action.payload?.data?.token;
+            state.role = action.payload?.data?.userData?.userType;
+            localStorage.setItem("role", action.payload?.data?.userData?.userType);
+            localStorage.setItem("isLoggedIn", (action.payload?.data?.token != undefined));
+            localStorage.setItem("data", JSON.stringify(action.payload?.data?.userData));
+            localStorage.setItem("token", action.payload?.data?.token);
         });
     }
 });
