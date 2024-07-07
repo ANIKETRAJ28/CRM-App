@@ -43,7 +43,6 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            console.log(state);
             localStorage.clear();
             state.role = '';
             state.isloggedIn = false;

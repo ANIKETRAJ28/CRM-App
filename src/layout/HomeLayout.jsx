@@ -16,7 +16,7 @@ function HomeLayout({ children }) {
     }, []);
 
     function onLogout() {
-        dispatch(logout());
+        dispatch(logout(authState));
         navigate("/login");
     }
 
