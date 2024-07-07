@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { IoMenu } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +10,10 @@ function HomeLayout({ children }) {
     const authState = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!authState.isloggedIn) navigate("/login");
+    }, []);
 
     function onLogout() {
         dispatch(logout());
