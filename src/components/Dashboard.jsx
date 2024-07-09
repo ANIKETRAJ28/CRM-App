@@ -20,24 +20,24 @@ function Dashboard() {
                 {/* table */}
                 <div className="flex flex-col w-full justify-start" ref={targetRef}>
                     {/* table row */}
-                    <div className="flex py-2 my-3 bg-purple-900 overflow-auto">
-                        <div className="table-title basis-[15%] text-start">Ticket Id</div>
-                        <div className="table-title basis-[20%]">Title</div>
-                        <div className="table-title basis-[30%]">Description</div>
-                        <div className="table-title basis-[25%]">Reporter</div>
+                    <div className="flex py-2 my-3 bg-purple-900 overflow-auto no-scrollbar">
+                        <div className="table-title basis-[15%] text-start min-w-24">Ticket Id</div>
+                        <div className="table-title basis-[20%] min-w-32">Title</div>
+                        <div className="table-title basis-[30%] min-w-32">Description</div>
+                        <div className="table-title basis-[25%] min-w-32">Reporter</div>
                         <div className="table-title basis-[5%]">Priority</div>
-                        <div className="table-title basis-[15%] text-end">Status</div>
+                        <div className="table-title basis-[15%] text-end min-w-24">Status</div>
                     </div>
                     {/* ticket details */}
                     {ticketState && ticketState.ticketList.map(ticket => {
                         return (
-                            <div key={ticket.id} className="my-1 flex gap-2 bg-indigo-900 overflow-auto hover:bg-indigo-950 transition-all ease-in-out duration-300">
-                                <div className="table-title basis-[15%] truncate text-start font-normal">{ticket._id}</div>
-                                <div className="table-title basis-[20%] truncate text-start font-normal">{ticket.title}</div>
-                                <div className="table-title basis-[30%] truncate text-start font-normal">{ticket.description}</div>
-                                <div className="table-title basis-[25%] truncate text-start font-normal">{ticket.assignee}</div>
+                            <div key={ticket.id} className="my-1 flex gap-2 bg-indigo-900 hover:bg-indigo-950 transition-all ease-in-out duration-300 overflow-auto no-scrollbar">
+                                <div className="table-title basis-[15%] truncate text-start font-normal min-w-24">{ticket._id}</div>
+                                <div className="table-title basis-[20%] truncate text-start font-normal min-w-32">{ticket.title}</div>
+                                <div className="table-title basis-[30%] truncate text-start font-normal min-w-32">{ticket.description}</div>
+                                <div className="table-title basis-[25%] truncate text-start font-normal min-w-32">{ticket.assignee}</div>
                                 <div className="table-title basis-[5%] truncate text-start font-normal">{ticket.ticketPriority}</div>
-                                <div className="table-title basis-[15%] truncate text-end font-normal">{ticket.status}</div>
+                                <div className="table-title basis-[15%] truncate text-end font-normal min-w-24">{ticket.status}</div>
                             </div>
                         );
                     })}
