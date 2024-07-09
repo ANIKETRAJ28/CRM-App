@@ -1,28 +1,14 @@
-import { useEffect } from "react";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { MdDoneAll, MdOutlineCancel, MdOutlinePending } from "react-icons/md";
 import { TbProgressBolt } from "react-icons/tb";
-import { useDispatch, useSelector } from "react-redux";
 
 import Card from "../../components/Card";
+import useTicket from "../../hooks/useTicket";
 import HomeLayout from "../../layout/HomeLayout";
-import { getMyAssignedTickets } from "../../Redux/Slices/TicketSlice";
 
 function Home() {
 
-    const authState = useSelector((state) => state.auth);
-    const ticketState = useSelector((state) => state.tickets);
-
-    const dispatch = useDispatch();
-
-    async function loadTickets() {
-        const response = await dispatch(getMyAssignedTickets());
-        console.log(response);
-    }
-
-    useEffect(() => {
-        loadTickets();
-    }, [authState.token]);
+    const [ticketState] = useTicket();
 
     return (
         <HomeLayout>
