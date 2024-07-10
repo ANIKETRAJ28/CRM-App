@@ -32,18 +32,65 @@ ChartJS.register(
 function Home() {
 
     const [ticketState] = useTicket();
-    const [openTicket, setOpenTicket] = useState({});
+    const [graphTicketDetails, setgraphTicketDetails] = useState({
+        open: {},
+        inProgress: {},
+        resolved : {},
+        onHold : {},
+        cancelled : {}
+    });
 
-    useEffect(() => {
-        let ticketOpen = {};
+    function setChartDetails() {
+        let demoTicketList = {
+            open: {},
+            inProgress: {},
+            resolved : {},
+            onHold : {},
+            cancelled : {}
+        };
+        let openTicket = {}, inProgressTicket = {}, resolvedTicket = {}, onHoldTicket = {}, cancelledTicket = {};
+        let tenDaysBeforeDate = new Date();
+        tenDaysBeforeDate = tenDaysBeforeDate.setDate(tenDaysBeforeDate.getDate()-10);
+        tenDaysBeforeDate = new Date(tenDaysBeforeDate);
+        tenDaysBeforeDate = tenDaysBeforeDate.toISOString().split('T')[0];
+        for(let i = 0 ; i < 10 ; i++) {
+            let date = new Date();
+            date = date.setDate(date.getDate()-i);
+            date = new Date(date);
+            openTicket[date.toISOString().split('T')[0]] = 0;
+            inProgressTicket[date.toISOString().split('T')[0]] = 0;
+            resolvedTicket[date.toISOString().split('T')[0]] = 0;
+            onHoldTicket[date.toISOString().split('T')[0]] = 0;
+            cancelledTicket[date.toISOString().split('T')[0]] = 0;
+        }
         ticketState.downloadTickets.forEach(ticket => {
-            if(ticket.status == 'open') {
-                if(ticketOpen[ticket.createdAt.split('T')[0]] == undefined) ticketOpen[ticket.createdAt.split('T')[0]] = 1;
-                else ticketOpen[ticket.createdAt.split('T')[0]] = ticketOpen[ticket.createdAt.split('T')[0]] + 1;
-                // ticketOpen[ticket.createdAt.split('T')[0]] ? ticketOpen[ticket.createdAt.split('T')[0]] = ticketOpen[ticket.createdAt.split('T')[0]] + 1 : 1;
+            if(ticket.status == 'open' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+                openTicket[ticket.createdAt.split('T')[0]] = openTicket[ticket.createdAt.split('T')[0]] + 1;
+            }
+            if(ticket.status == 'inProgress' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+                inProgressTicket[ticket.createdAt.split('T')[0]] = inProgressTicket[ticket.createdAt.split('T')[0]] + 1;
+            }
+            if(ticket.status == 'resolved' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+                resolvedTicket[ticket.createdAt.split('T')[0]] = resolvedTicket[ticket.createdAt.split('T')[0]] + 1;
+            }
+            if(ticket.status == 'onHold' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+                onHoldTicket[ticket.createdAt.split('T')[0]] = onHoldTicket[ticket.createdAt.split('T')[0]] + 1;
+            }
+            if(ticket.status == 'cancelled' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+                cancelledTicket[ticket.createdAt.split('T')[0]] = cancelledTicket[ticket.createdAt.split('T')[0]] + 1;
             }
         });
-        setOpenTicket(ticketOpen);
+        demoTicketList.open = openTicket;
+        demoTicketList.inProgress = inProgressTicket;
+        demoTicketList.resolved = resolvedTicket;
+        demoTicketList.onHold = onHoldTicket;
+        demoTicketList.cancelled = cancelledTicket;
+        console.log(Object.keys(demoTicketList.open));
+        setgraphTicketDetails(demoTicketList);
+    }
+
+    useEffect(() => {
+        setChartDetails();
     }, [ticketState.downloadTickets]);
 
     const pieChartData = {
@@ -52,24 +99,51 @@ function Home() {
             {
                 lable: "Ticket Data",
                 data: Object.values(ticketState.ticketType),
-                backgroundColor: ["green", "purple", "grey", "blue", "yellow"],
-                borderColor: ["green", "purple", "grey", "blue", "yellow"],
+                backgroundColor: ["#22C55E", "#A855F7", "#6B7280", "#93C5FD", "#FDE047"],
+                borderColor: ["#22C55E", "#A855F7", "#6B7280", "#93C5FD", "#FDE047"],
             }
         ],
     };
 
     const lineChartData = {
-        labels: Object.keys(openTicket),
+        labels: Object.keys(graphTicketDetails.open),
         datasets: [
-          {
-            label: "Open Ticket Data",
-            data: Object.values(openTicket),
+            {
+            label: "Open Ticket",
+            data: Object.values(graphTicketDetails.open),
+            borderColor: "#22C55E",
+            backgroundColor: "#22C55E",
+            },
+            {
+            label: "In Progress Ticket",
+            data: Object.values(graphTicketDetails.inProgress),
             fill: true,
-            backgroundColor: "rgba(75,192,192,0.2)",
-            borderColor: "rgba(75,192,192,1)"
-          },
+            borderColor: "#A855F7",
+            backgroundColor: "#A855F7",
+            },
+            {
+            label: "Resolved Ticket",
+            data: Object.values(graphTicketDetails.resolved),
+            fill: true,
+            borderColor: "#6B7280",
+            backgroundColor: "#6B7280",
+            },
+            {
+            label: "on Hold Ticket",
+            data: Object.values(graphTicketDetails.onHold),
+            fill: true,
+            borderColor: "#93C5FD",
+            backgroundColor: "#93C5FD",
+            },
+            {
+            label: "Cancelled Ticket",
+            data: Object.values(graphTicketDetails.cancelled),
+            fill: true,
+            borderColor: "#FDE047",
+            backgroundColor: "#FDE047",
+            },
         ]
-      };
+    };
 
     return (
         <HomeLayout>
@@ -90,11 +164,13 @@ function Home() {
                     <MdOutlineCancel className="inline mr-2"/>
                 </Card>
             </div>
-            <div className='w-80 h-80'>
-                <Pie data={pieChartData}/>
-            </div>
-            <div className='w-80 h-80'>
-                <Line data={lineChartData}/>
+            <div className='my-8 flex justify-around items-center'>
+                <div className='bg-white w-[30%]'>
+                    <Pie data={pieChartData}/>
+                </div>
+                <div className='bg-white w-[60%]'>
+                    <Line className='text-white' data={lineChartData}/>
+                </div>
             </div>
         </HomeLayout>
     );
