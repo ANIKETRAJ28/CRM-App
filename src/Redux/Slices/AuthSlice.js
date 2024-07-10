@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 import axiosConfig from "../../config/axiosConfig";
+import ticketState from "./TicketSlice";
 
 const initialState = {
     role: localStorage.getItem("role") || "",
@@ -42,12 +43,21 @@ const authSlice = createSlice({
     name: "Auth",
     initialState,
     reducers: {
-        logout: (state) => {
+        logoutAuth: (state) => {
             localStorage.clear();
             state.role = '';
             state.isloggedIn = false;
             state.data = undefined;
             state.token = '';
+            ticketState.downloadTickets = [],
+            ticketState.ticketList = [],
+            ticketState.ticketType = {
+                open: 0,
+                inProgress: 0,
+                resolved: 0,
+                onHold: 0,
+                cancelled: 0
+            };
         }
     },
     extraReducers: (builder) => {
@@ -65,5 +75,5 @@ const authSlice = createSlice({
     }
 });
 
-export const {logout} = authSlice.actions;
+export const {logoutAuth} = authSlice.actions;
 export default authSlice.reducer;

@@ -42,13 +42,14 @@ function Dashboard() {
         rows: {
             style: {
                 minHeight: '72px', // override the row height
-                fontSize: '15px'
+                fontSize: '26.3px'
             },
         },
         headCells: {
             style: {
                 paddingLeft: '8px', // override the cell padding for head cells
                 paddingRight: '8px',
+                fontSize: '30px'
             },
         },
         cells: {
@@ -61,7 +62,7 @@ function Dashboard() {
 
     return (
         <HomeLayout>
-            <div className="min-h-[90vh] flex flex-col items-center justify-center gap-2">
+            <div className="min-h-[90vh] min-w-[90vw] flex flex-col items-center justify-start gap-2">
                 <div className="w-full bg-yellow-500 text-black text-center text-3xl py-4 font-bold hover:bg-yellow-400 transition-all ease-in-out duration-300">
                     Ticket Records
                     <MdOutlineFileDownload onClick={toPDF} className="inline cursor-pointer"/>

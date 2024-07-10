@@ -3,11 +3,13 @@ import { IoMenu } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import { logout } from "../Redux/Slices/AuthSlice";
+import { logoutAuth } from "../Redux/Slices/AuthSlice";
+import { logoutTicket } from "../Redux/Slices/TicketSlice";
 
 function HomeLayout({ children }) {
 
     const authState = useSelector((state) => state.auth);
+    const ticketState = useSelector((state) => state.tickets);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -16,7 +18,8 @@ function HomeLayout({ children }) {
     }, []);
 
     function onLogout() {
-        dispatch(logout(authState));
+        dispatch(logoutAuth(authState));
+        dispatch(logoutTicket(ticketState));
         navigate("/login");
     }
 
@@ -32,7 +35,7 @@ function HomeLayout({ children }) {
                         />
                     </label>
                 </div>
-                <div className="drawer-side">
+                <div className="drawer-side z-10">
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 relative">
                     <li><a>View All Tickets</a></li>
@@ -61,7 +64,7 @@ function HomeLayout({ children }) {
             </div>
 
             <div className="flex items-start justify-center">
-                <div className="w-3/5 mt-20">
+                <div className="w-[90vw] mt-20">
                     {children}
                 </div>
             </div>

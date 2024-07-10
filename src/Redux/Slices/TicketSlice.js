@@ -40,10 +40,22 @@ const ticketSlice = createSlice({
         filterTickets : (state, action) => {
             let ticketStatus = action.payload.status.toLowerCase();
             if(ticketStatus == 'in progress') ticketStatus = 'inProgress';
+            if(ticketStatus == 'on hold') ticketStatus = 'onHold';
             state.ticketList = state.downloadTickets.filter((ticket) => ticket.status === ticketStatus);
         },
         resetTicketList: (state) => {
             state.ticketList = state.downloadTickets;
+        },
+        logoutTicket : (state) => {
+            state.downloadTickets = [],
+            state.ticketList = [],
+            state.ticketType = {
+                open: 0,
+                inProgress: 0,
+                resolved: 0,
+                onHold: 0,
+                cancelled: 0
+            };
         }
     },
     extraReducers: (builder) => {
@@ -66,5 +78,5 @@ const ticketSlice = createSlice({
     }
 });
 
-export const { filterTickets, resetTicketList } = ticketSlice.actions;
+export const { filterTickets, resetTicketList, logoutTicket } = ticketSlice.actions;
 export default ticketSlice.reducer;
