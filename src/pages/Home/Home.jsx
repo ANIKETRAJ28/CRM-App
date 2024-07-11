@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { MdDoneAll, MdOutlineCancel, MdOutlinePending } from "react-icons/md";
 import { TbProgressBolt } from "react-icons/tb";
+import { useSelector } from "react-redux";
 
 import Card from "../../components/Card";
 import useChart from "../../hooks/useChart";
@@ -11,7 +13,11 @@ import HomeLayout from "../../layout/HomeLayout";
 function Home() {
 
     const [ticketState] = useTicket();
-    const [pieChartData, lineChartData, barChartData] = useChart();
+    const {token} = useSelector((state) => state.auth);
+    const [pieChartData, lineChartData, barChartData] = useChart(token);
+
+    useEffect(() => {
+    }, [token]);
 
     return (
         <HomeLayout>
@@ -39,7 +45,7 @@ function Home() {
                 <div className='bg-slate-700 w-[50rem]'>
                     <Line className='text-white' data={lineChartData}/>
                 </div>
-                <div className='bg-slate-700 -[50rem]'>
+                <div className='bg-slate-700 w-[50rem]'>
                     <Bar className='text-white' data={barChartData}/>
                 </div>
             </div>

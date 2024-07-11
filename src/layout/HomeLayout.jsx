@@ -41,6 +41,7 @@ function HomeLayout({ children }) {
                     <li><a>View All Tickets</a></li>
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/dashboard">Dashboard</Link></li>
+                    {authState.role === 'admin' && <li><Link to="/users">Users</Link></li>}
                     <li className="absolute bottom-4 w-[90%]">
                         <div className="flex justify-between">
                             {

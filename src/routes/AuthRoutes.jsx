@@ -1,40 +1,58 @@
-import DataTable from 'react-data-table-component';
+import { useEffect, useState } from "react";
+import DataTable from "react-data-table-component";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { usePDF } from 'react-to-pdf';
+import { useSelector } from "react-redux";
+import { usePDF } from "react-to-pdf";
 
-import useTicket from "../hooks/useTicket";
+import axiosConfig from "../config/axiosConfig";
 import HomeLayout from "../layout/HomeLayout";
+
 const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
-function Dashboard() {
+function AuthRoutes() {
 
-    const [ticketState] = useTicket();
+    const {role, token} = useSelector((state) => state.auth);
+    const [user, setUser] = useState([]);
+
+    async function getUsers() {
+        const response = await axiosConfig.get('/users', {
+            headers: {
+                'x-access-token' : token
+            }
+        });
+        setUser(response.data.result);
+    }
+
+    useEffect(() => {
+        if(role !== 'admin') return;
+        getUsers();
+    }, []);
 
     const { toPDF, targetRef } = usePDF({filename: 'Ticket-Records.pdf'});
     const columns = [
         {
-            name: 'Ticket Id',
-            selector: row => row._id,
+            name: 'User Name',
+            selector: row => row.name,
         },
         {
-            name: 'Title',
-            selector: row => row.title,
+            name: 'User Email',
+            selector: row => row.email,
         },
         {
-            name: 'Description',
-            selector: row => row.description,
+            name: 'Client Name',
+            selector: row => row.clientName,
         },
         {
-            name: 'Reporter',
-            selector: row => row.assignee,
+            name: 'Type',
+            selector: row => row.userType,
         },
         {
-            name: 'Priority',
-            selector: row => row.ticketPriority,
+            name: 'Client Name',
+            selector: row => row.clientName,
         },
         {
             name: 'Status',
-            selector: row => row.status,
+            selector: row => row.userStatus,
         }
     ];
 
@@ -61,7 +79,8 @@ function Dashboard() {
     };
 
     return (
-        <HomeLayout>
+        <HomeLayout>{
+            role === 'admin' && 
             <div className="min-h-[90vh] min-w-[90vw] flex flex-col items-center justify-start gap-2">
                 <div className="w-full bg-yellow-500 text-black text-center text-3xl py-4 font-bold hover:bg-yellow-400 transition-all ease-in-out duration-300">
                     Ticket Records
@@ -69,20 +88,17 @@ function Dashboard() {
                 </div>
                 {/* table */}
                 <div className="w-[100%]" ref={targetRef}>
-                    {
-                        ticketState &&
-                        <DataTable
-                            columns={columns}
-                            data={ticketState.ticketList}
-                            expandableRows
-                            expandableRowsComponent={ExpandedComponent}
-                            customStyles={customStyles}
-                        />
-                    }
+                    <DataTable
+                        columns={columns}
+                        data={user}
+                        expandableRows
+                        expandableRowsComponent={ExpandedComponent}
+                        customStyles={customStyles}
+                    />
                 </div>
             </div>
-        </HomeLayout>
+        }</HomeLayout>
     );
 }
 
-export default Dashboard;
+export default AuthRoutes;

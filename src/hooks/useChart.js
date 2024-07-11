@@ -25,9 +25,12 @@ ChartJS.register(
     Tooltip,
 );
 
-function useChart() {
+function useChart(token) {
 
     const [ticketState] = useTicket();
+    useEffect(() => {
+        console.log("hello");
+    }, [token]);
 
     const [lineChartTicketDetails, setLineChartTicketDetails] = useState({
         open: {},
@@ -65,7 +68,8 @@ function useChart() {
         tenDaysBeforeDate = tenDaysBeforeDate.setDate(tenDaysBeforeDate.getDate()-10);
         tenDaysBeforeDate = new Date(tenDaysBeforeDate);
         tenDaysBeforeDate = tenDaysBeforeDate.toISOString().split('T')[0];
-        for(let i = 0 ; i < 10 ; i++) {
+        const currDate = new Date().toISOString().split('T')[0];
+        for(let i = 9 ; i >= 0 ; i--) {
             let date = new Date();
             date = date.setDate(date.getDate()-i);
             date = new Date(date);
@@ -76,19 +80,19 @@ function useChart() {
             cancelledTicket[date.toISOString().split('T')[0]] = 0;
         }
         ticketState.downloadTickets.forEach(ticket => {
-            if(ticket.status == 'open' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+            if(ticket.status == 'open' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
                 openTicket[ticket.createdAt.split('T')[0]] = openTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'inProgress' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+            if(ticket.status == 'inProgress' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
                 inProgressTicket[ticket.createdAt.split('T')[0]] = inProgressTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'resolved' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+            if(ticket.status == 'resolved' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
                 resolvedTicket[ticket.createdAt.split('T')[0]] = resolvedTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'onHold' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+            if(ticket.status == 'onHold' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
                 onHoldTicket[ticket.createdAt.split('T')[0]] = onHoldTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'cancelled' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate) {
+            if(ticket.status == 'cancelled' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
                 cancelledTicket[ticket.createdAt.split('T')[0]] = cancelledTicket[ticket.createdAt.split('T')[0]] + 1;
             }
 
