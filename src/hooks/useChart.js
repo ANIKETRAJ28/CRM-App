@@ -29,7 +29,6 @@ function useChart(token) {
 
     const [ticketState] = useTicket();
     useEffect(() => {
-        console.log("hello");
     }, [token]);
 
     const [lineChartTicketDetails, setLineChartTicketDetails] = useState({
