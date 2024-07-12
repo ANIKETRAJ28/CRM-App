@@ -4,6 +4,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { usePDF } from "react-to-pdf";
 
+import UserModal from "../components/UserModal";
 import axiosConfig from "../config/axiosConfig";
 import HomeLayout from "../layout/HomeLayout";
 
@@ -12,11 +13,12 @@ function AuthRoutes() {
     const {role, token} = useSelector((state) => state.auth);
     const [user, setUser] = useState([]);
     const [userData, setUserData] = useState({
+        userId: '',
         name: '',
         email: '',
         clientName: '',
         userType: '',
-        userStatus: ''
+        userStatus: '',
     });
 
     async function getUsers() {
@@ -96,15 +98,17 @@ function AuthRoutes() {
                     <div className="w-[100%]" ref={targetRef}>
                         <DataTable
                             className="cursor-pointer"
-                            onRowClicked={(row) => {
-                                document.getElementById('my_modal_2').showModal();
-                                setUserData({
+                            onRowClicked={async (row) => {
+                                await setUserData({
                                     name: row.name,
                                     email: row.email,
                                     clientName: row.clientName,
                                     userStatus: row.userStatus,
-                                    userType: row.userType
+                                    userType: row.userType,
+                                    showModal: true,
+                                    userId: row._id
                                 });
+                                document.getElementById('user-details-modal').showModal();
                             }}
                             columns={columns}
                             data={user}
@@ -112,19 +116,7 @@ function AuthRoutes() {
                         />
                     </div>
                 </div>
-                <dialog id="my_modal_2" className="modal">
-                    <div className="modal-box">
-                        <h3 className="font-bold text-3xl mb-4">User Details</h3>
-                        <p className="py-4 text-lg font-semibold">Name : <span className="text-yellow-500">{userData.name}</span></p>
-                        <p className="py-4 text-lg font-semibold">Email : <span className="text-yellow-500">{userData.email}</span></p>
-                        <p className="py-4 text-lg font-semibold">Client Name : <span className="text-yellow-500">{userData.clientName}</span></p>
-                        <p className="py-4 text-lg font-semibold">User Type : <span className="text-yellow-500">{userData.userType}</span></p>
-                        <p className="py-4 text-lg font-semibold">User Status : <span className="text-yellow-500">{userData.userStatus}</span></p>
-                    </div>
-                    <form method="dialog" className="modal-backdrop">
-                        <button>close</button>
-                    </form>
-                </dialog>
+                <UserModal key={userData.email} userData={userData} resetUsers={getUsers}/>
             </div>
         }</HomeLayout>
     );
