@@ -17,7 +17,7 @@ function Home() {
     const [pieChartData, lineChartData, barChartData] = useChart(token);
 
     useEffect(() => {
-    }, [token]);
+    }, [token, ticketState.ticketList]);
 
     return (
         <HomeLayout>

@@ -28,8 +28,6 @@ ChartJS.register(
 function useChart(token) {
 
     const [ticketState] = useTicket();
-    useEffect(() => {
-    }, [token]);
 
     const [lineChartTicketDetails, setLineChartTicketDetails] = useState({
         open: {},
@@ -79,20 +77,25 @@ function useChart(token) {
             cancelledTicket[date.toISOString().split('T')[0]] = 0;
         }
         ticketState.downloadTickets.forEach(ticket => {
-            if(ticket.status == 'open' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
-                openTicket[ticket.createdAt.split('T')[0]] = openTicket[ticket.createdAt.split('T')[0]] + 1;
+            if(ticket.status == 'open') {
+                if(ticket.updatedAt.split('T')[0] > tenDaysBeforeDate && ticket.updatedAt.split('T')[0] <= currDate) openTicket[ticket.updatedAt.split('T')[0]] = openTicket[ticket.updatedAt.split('T')[0]] + 1;
+                if(ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) openTicket[ticket.createdAt.split('T')[0]] = openTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'inProgress' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
-                inProgressTicket[ticket.createdAt.split('T')[0]] = inProgressTicket[ticket.createdAt.split('T')[0]] + 1;
+            if(ticket.status == 'inProgress') {
+                if(ticket.updatedAt.split('T')[0] > tenDaysBeforeDate && ticket.updatedAt.split('T')[0] <= currDate) inProgressTicket[ticket.updatedAt.split('T')[0]] = inProgressTicket[ticket.updatedAt.split('T')[0]] + 1;
+                if(ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) inProgressTicket[ticket.createdAt.split('T')[0]] = inProgressTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'resolved' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
-                resolvedTicket[ticket.createdAt.split('T')[0]] = resolvedTicket[ticket.createdAt.split('T')[0]] + 1;
+            if(ticket.status == 'resolved') {
+                if(ticket.updatedAt.split('T')[0] > tenDaysBeforeDate && ticket.updatedAt.split('T')[0] <= currDate) resolvedTicket[ticket.updatedAt.split('T')[0]] = resolvedTicket[ticket.updatedAt.split('T')[0]] + 1;
+                if(ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) resolvedTicket[ticket.createdAt.split('T')[0]] = resolvedTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'onHold' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
-                onHoldTicket[ticket.createdAt.split('T')[0]] = onHoldTicket[ticket.createdAt.split('T')[0]] + 1;
+            if(ticket.status == 'onHold') {
+                if(ticket.updatedAt.split('T')[0] > tenDaysBeforeDate && ticket.updatedAt.split('T')[0] <= currDate) onHoldTicket[ticket.updatedAt.split('T')[0]] = onHoldTicket[ticket.updatedAt.split('T')[0]] + 1;
+                if(ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) onHoldTicket[ticket.createdAt.split('T')[0]] = onHoldTicket[ticket.createdAt.split('T')[0]] + 1;
             }
-            if(ticket.status == 'cancelled' && ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) {
-                cancelledTicket[ticket.createdAt.split('T')[0]] = cancelledTicket[ticket.createdAt.split('T')[0]] + 1;
+            if(ticket.status == 'cancelled') {
+                if(ticket.updatedAt.split('T')[0] > tenDaysBeforeDate && ticket.updatedAt.split('T')[0] <= currDate) cancelledTicket[ticket.updatedAt.split('T')[0]] = cancelledTicket[ticket.updatedAt.split('T')[0]] + 1;
+                if(ticket.createdAt.split('T')[0] > tenDaysBeforeDate && ticket.createdAt.split('T')[0] <= currDate) cancelledTicket[ticket.createdAt.split('T')[0]] = cancelledTicket[ticket.createdAt.split('T')[0]] + 1;
             }
 
             let month = new Date(ticket.createdAt);
@@ -125,7 +128,7 @@ function useChart(token) {
 
     useEffect(() => {
         setChartDetails();
-    }, [ticketState.downloadTickets]);
+    }, [token.length, ticketState.ticketList]);
 
     const pieChartData = {
         labels: ["Open Ticket", "In Progress Ticket", "Resolved Ticket", "On Hold Ticket", "Cancelled Ticket"],

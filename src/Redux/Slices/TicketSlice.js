@@ -36,7 +36,7 @@ export const getMyAssignedTickets = createAsyncThunk('tickets/getMyAssignedTicke
 export const updateTicket = createAsyncThunk('tickets/updateTickets', async (ticket) => {
     try {
         const response = axiosConfig.patch(`/ticket/${ticket._id}`, 
-            ticket, {
+            {...ticket, updatedAt : new Date()}, {
             headers : {
                 'x-access-token' : localStorage.getItem('token')
             }
