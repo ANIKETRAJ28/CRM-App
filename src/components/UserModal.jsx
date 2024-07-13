@@ -43,14 +43,15 @@ function UserModal({userData, resetUsers}) {
                 <p className="py-4 text-sm font-semibold">Name : <span className="text-yellow-500">{user.name}</span></p>
                 <p className="py-4 text-sm font-semibold">Email : <span className="text-yellow-500">{user.email}</span></p>
                 <p className="py-4 text-sm font-semibold">Client Name : <span className="text-yellow-500">{user.clientName}</span></p>
-                <p className="py-4 text-sm font-semibold">User Status : <span className="text-yellow-500">
-                    <details className="dropdown ml-2" id="userStatusDropdown">
-                            <summary id="userStatus" className="m-1 btn">{user.userStatus}</summary>
-                            <ul name="userStatus" onClick={(e) => userUpdate("userStatus", e)} className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-                                <li><a>approved</a></li>
-                                <li><a>suspended</a></li>
-                                <li><a>rejected</a></li>
-                            </ul>
+                <p className="py-4 text-sm font-semibold">User Status : 
+                    <span className="text-yellow-500">
+                        <details className="dropdown ml-2" id="userStatusDropdown">
+                                <summary id="userStatus" className="m-1 btn">{user.userStatus}</summary>
+                                <ul name="userStatus" onClick={(e) => userUpdate("userStatus", e)} className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                                    <li><a>approved</a></li>
+                                    <li><a>suspended</a></li>
+                                    <li><a>rejected</a></li>
+                                </ul>
                         </details>
                     </span>
                 </p>

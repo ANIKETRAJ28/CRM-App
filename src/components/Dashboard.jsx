@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { MdOutlineFileDownload } from "react-icons/md";
 import { usePDF } from 'react-to-pdf';
 
 import useTicket from "../hooks/useTicket";
 import HomeLayout from "../layout/HomeLayout";
-const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
+import TicketDetailsModal from './TicketDetailsModal';
 
 function Dashboard() {
 
     const [ticketState] = useTicket();
+    const [currTicket, setCurrTicket] = useState({});
 
     const { toPDF, targetRef } = usePDF({filename: 'Ticket-Records.pdf'});
     const columns = [
@@ -72,13 +74,17 @@ function Dashboard() {
                     {
                         ticketState &&
                         <DataTable
+                        className='cursor-pointer'
+                            onRowClicked={async (row) => {
+                                await setCurrTicket(row);
+                                document.getElementById('ticketDetailsModal').showModal();
+                            }}
                             columns={columns}
                             data={ticketState.ticketList}
-                            expandableRows
-                            expandableRowsComponent={ExpandedComponent}
                             customStyles={customStyles}
                         />
                     }
+                    <TicketDetailsModal ticket={currTicket} key={currTicket._id}/>
                 </div>
             </div>
         </HomeLayout>

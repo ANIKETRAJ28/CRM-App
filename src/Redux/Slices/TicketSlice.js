@@ -33,6 +33,25 @@ export const getMyAssignedTickets = createAsyncThunk('tickets/getMyAssignedTicke
     }
 });
 
+export const updateTicket = createAsyncThunk('tickets/updateTickets', async (ticket) => {
+    try {
+        const response = axiosConfig.patch(`/ticket/${ticket._id}`, 
+            ticket, {
+            headers : {
+                'x-access-token' : localStorage.getItem('token')
+            }
+        });
+        toast.promise(response, {
+            success: "Successfully updated the ticket",
+            loading: "Updating the ticket",
+            error: "Something went wrong whilte updating ticket!",
+        });
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 const ticketSlice = createSlice({
     name: "tickets",
     initialState,
@@ -59,7 +78,8 @@ const ticketSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(getMyAssignedTickets.fulfilled, (state, action) => {
+        builder
+        .addCase(getMyAssignedTickets.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
             state.ticketList = action?.payload?.data?.result;
             state.downloadTickets = action?.payload?.data?.result;
@@ -72,6 +92,27 @@ const ticketSlice = createSlice({
                 cancelled: 0
             };
             tickets.forEach((ticket) => {
+                state.ticketType[ticket.status] = state.ticketType[ticket.status] + 1;
+            });
+        })
+        .addCase(updateTicket.fulfilled, (state, action) => {
+            const updatedticket = action.payload.data.result;
+            state.downloadTickets = state.downloadTickets.map((ticket) => {
+                if(ticket._id == updatedticket._id) return updatedticket;
+                return ticket;
+            });
+            state.ticketList = state.ticketList.map((ticket) => {
+                if(ticket._id == updatedticket._id) return updatedticket;
+                return ticket;
+            });
+            state.ticketType = {
+                open: 0,
+                inProgress: 0,
+                resolved: 0,
+                onHold: 0,
+                cancelled: 0
+            };
+            state.downloadTickets.forEach((ticket) => {
                 state.ticketType[ticket.status] = state.ticketType[ticket.status] + 1;
             });
         });
