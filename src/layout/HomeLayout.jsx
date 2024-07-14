@@ -15,7 +15,7 @@ function HomeLayout({ children }) {
 
     useEffect(() => {
         if(!authState.isloggedIn) navigate("/login");
-    }, []);
+    });
 
     function onLogout() {
         dispatch(logoutAuth(authState));
@@ -24,7 +24,7 @@ function HomeLayout({ children }) {
     }
 
     return (
-        <div className="min-h-[90vh]">
+        <div className="sticky min-h-[100vh]">
             <div className="drawer absolute left-0 right-0 cursor-pointer mt-4 ml-4">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
@@ -38,10 +38,12 @@ function HomeLayout({ children }) {
                 <div className="drawer-side z-10">
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 relative">
-                    <li><a>View All Tickets</a></li>
+                        <li className="text-2xl mb-2 "><h3>Hey! {authState.data.name} 👋</h3></li>
+                    {authState.role === 'admin' && <li><Link to={'/dashboard?status=AllTickets'}>View All Tickets</Link></li>}
+                    {authState.role === 'admin' && <li><Link to="/users">Users</Link></li>}
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/dashboard">Dashboard</Link></li>
-                    {authState.role === 'admin' && <li><Link to="/users">Users</Link></li>}
+                    {authState.role === 'customer' && <li><Link to="/createTicket">Create Ticket</Link></li>}
                     <li className="absolute bottom-4 w-[90%]">
                         <div className="flex justify-between">
                             {

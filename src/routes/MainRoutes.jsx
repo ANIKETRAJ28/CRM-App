@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import Dashboard from "../components/Dashboard";
+import UserTicket from "../components/UserTicket";
 import Login from "../pages/Auth/Login";
 import SignUp from "../pages/Auth/SignUp";
 import Home from "../pages/Home/Home";
@@ -14,6 +15,7 @@ function MainRoutes() {
             <Route>
                 <Route path="/users" element={<AuthRoutes/>}/>
             </Route>
+            <Route path="/createTicket" element={<UserTicket/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<SignUp/>}/>
         </Routes>

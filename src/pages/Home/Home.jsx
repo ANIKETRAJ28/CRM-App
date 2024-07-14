@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { MdDoneAll, MdOutlineCancel, MdOutlinePending } from "react-icons/md";
@@ -15,9 +14,6 @@ function Home() {
     const [ticketState] = useTicket();
     const {token} = useSelector((state) => state.auth);
     const [pieChartData, lineChartData, barChartData] = useChart(token);
-
-    useEffect(() => {
-    }, [token, ticketState.ticketList]);
 
     return (
         <HomeLayout>
