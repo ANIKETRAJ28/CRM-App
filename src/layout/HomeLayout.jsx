@@ -67,7 +67,7 @@ function HomeLayout({ children }) {
             </div>
 
             <div className="flex items-start justify-center">
-                <div className="w-[90vw] mt-20">
+                <div className="w-[90vw] mt-12">
                     {children}
                 </div>
             </div>
