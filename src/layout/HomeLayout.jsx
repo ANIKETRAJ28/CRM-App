@@ -24,7 +24,7 @@ function HomeLayout({ children }) {
     }
 
     return (
-        <div className="sticky min-h-[100vh]">
+        <div className="sticky h-[100vh]">
             <div className="drawer absolute left-0 right-0 cursor-pointer mt-4 ml-4">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
@@ -35,9 +35,9 @@ function HomeLayout({ children }) {
                         />
                     </label>
                 </div>
-                <div className="drawer-side z-10">
+                <div className="drawer-side z-10 h-full">
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-                    <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 relative">
+                    <ul className="menu bg-base-200 text-base-content h-full w-70 p-4 relative">
                         <li className="text-2xl mb-2 "><h3>Hey! {authState.data.name} 👋</h3></li>
                     {authState.role === 'admin' && <li><Link to={'/dashboard?status=AllTickets'}>View All Tickets</Link></li>}
                     {authState.role === 'admin' && <li><Link to="/users">Users</Link></li>}
